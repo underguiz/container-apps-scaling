@@ -1,5 +1,5 @@
 # About this project
-Scale Container Apps application based on events. This example uses a Service Bus queue size as a scale trigger.
+Scale Container Apps application based on events. This example uses the size of a Service Bus queue as a scaling trigger.
 
 Currently using ```azapi_resource``` to create the Container Apps resources since there's module in terraform as of now.
 
