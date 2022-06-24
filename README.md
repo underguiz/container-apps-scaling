@@ -1,7 +1,7 @@
 # About this project
 Scale Container Apps application based on events. This example uses the size of a Service Bus queue as a scaling trigger.
 
-Currently using ```azapi_resource``` to create the Container Apps resources since there's module in terraform as of now.
+Currently using ```azapi_resource``` to create the Container Apps resources since there's no module in terraform as of now.
 
 ## Architecture 
 
@@ -37,7 +37,7 @@ $ terraform plan -var 'order-app=<resource_group_name>'
 $ terraform apply
 ```
 
-### Watch the Consumer App replica count increase as messages are produced by the Producer Replica (az containerapp replica list takes a while to reflect the actual count)
+### Watch the Consumer App replica count increase as messages are produced by the Producer App (```az containerapp replica list``` takes a while to reflect the actual count)
 
 ```
 $ az containerapp replica list --name order-consumer --resource-group <resource_group> -o table
