@@ -41,7 +41,7 @@ $ terraform apply
 
 ```
 $ az containerapp replica list --name order-consumer --resource-group <resource_group> -o table
-$ az servicebus queue show --resource-group <resource_group> --namespace-name <servicebus_namespace> --name orders -o table --query 'messageCount
+$ az servicebus queue show --resource-group <resource_group> --namespace-name <servicebus_namespace> --name orders -o table --query 'messageCount'
 ```
 
 ### Remove the Producer App and watch the Consumer scale to zero
