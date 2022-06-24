@@ -1,20 +1,52 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# About this project
+Scale Container Apps application based on events. This example uses a Service Bus queue size as a scale trigger.
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+Currently using ```azapi_resource``` to create the Container Apps resources since there's module in terraform as of now.
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+## Architecture 
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+![Architecture](Container-Apps-Aks.png "Container Apps Scaling")
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+## Usage
+
+### Create the Container Registry using ```terraform```
+
+```
+$ cd terraform
+$ az login
+$ terraform init
+$ terraform plan -var 'order-app=<resource_group_name>' -target azurerm_container_registry.order-app
+$ terraform apply -target azurerm_container_registry.order-app
+```
+
+### Build the order-app images using ACR Tasks
+
+```
+cd apps/order-consumer
+az acr build -r <acr_name> --image order-consumer:v1 .
+cd apps/order-producer
+az acr build -r <acr_name> --image order-producer:v1 .
+
+```
+
+### Deploy remaining resources using ```terraform```
+
+```
+$ cd terraform
+$ terraform plan -var 'order-app=<resource_group_name>'
+$ terraform apply
+```
+
+### Watch the Consumer App replica count increase as messages are produced by the Producer Replica (az containerapp replica list takes a while to reflect the actual count)
+
+```
+$ az containerapp replica list --name order-consumer --resource-group <resource_group> -o table
+$ az servicebus queue show --resource-group <resource_group> --namespace-name <servicebus_namespace> --name orders -o table --query 'messageCount
+```
+
+### Remove the Producer App and watch the Consumer scale to zero
+```
+$ cd terraform
+$ terraform destroy -target azapi_resource.order-producer
+$ az containerapp replica list --name order-consumer --resource-group <resource_group> -o table
+```
