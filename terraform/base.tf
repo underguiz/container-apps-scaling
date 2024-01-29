@@ -10,9 +10,6 @@ provider "azurerm" {
   features {}
 }
 
-provider "azapi" {
-}
-
 variable "order-app" {
   type    = string
   default = "order-app"
