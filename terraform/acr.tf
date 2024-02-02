@@ -9,7 +9,6 @@ resource "azurerm_container_registry" "order-app" {
   resource_group_name = data.azurerm_resource_group.order-app.name
   location            = data.azurerm_resource_group.order-app.location
   sku                 = "Standard"
-  admin_enabled       = true
 }
 
 resource "azurerm_role_assignment" "container-apps-acr" {
